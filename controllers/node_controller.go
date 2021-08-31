@@ -121,7 +121,7 @@ func nodeMergeNodeConfig(node corev1.Node, m configv1alpha1.Merge) (updatedNode 
 	match = true
 	if m.Labels != nil {
 		for k, v := range m.Labels {
-			if node.Labels[k] != v {
+			if rv, ok := node.Labels[k]; !ok || rv != v {
 				match = false
 				node.Labels[k] = v
 			}
@@ -129,7 +129,7 @@ func nodeMergeNodeConfig(node corev1.Node, m configv1alpha1.Merge) (updatedNode 
 	}
 	if m.Annotations != nil {
 		for k, v := range m.Annotations {
-			if node.Annotations[k] != v {
+			if rv, ok := node.Annotations[k]; !ok || rv != v {
 				match = false
 				node.Annotations[k] = v
 			}
