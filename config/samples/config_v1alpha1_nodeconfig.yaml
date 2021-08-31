@@ -1,7 +1,29 @@
 apiVersion: config.snappcloud.io/v1alpha1
 kind: NodeConfig
 metadata:
-  name: nodeconfig-sample
+  name: nodeconfig-edge
 spec:
-  # Add fields here
-  foo: bar
+  match:
+    nodeNamePatterns:
+      - okd4-worker-edge-.*
+    # nodeSelectorTerms:
+    # - matchExpressions:
+    #   - key: kubernetes.io/hostname
+    #     operator: In
+    #     values:
+    #     - minikube
+    #   - key: beta.kubernetes.io/os
+    #     operator: In
+    #     values:
+    #     - linux
+    # - matchExpressions:
+    #   - key: another-node-label-key
+    #     operator: Exists
+  merge:
+    labels:
+      node-role.kubernetes.io/edge: "true"
+    annotations:
+      nodeconfig.config.snappcloud.io/managed: "true"
+    taints:
+    - effect: NoExecute
+      key: node-role.kubernetes.io/edge

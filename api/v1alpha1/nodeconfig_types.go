@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -28,8 +29,18 @@ type NodeConfigSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of NodeConfig. Edit nodeconfig_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Match Match `json:"match,omitempty"`
+	Merge Merge `json:"merge,omitempty"`
+}
+
+type Match struct {
+	NodeNamePatterns []string `json:"nodeNamePatterns,omitempty"`
+}
+
+type Merge struct {
+	Labels      map[string]string `json:"labels,omitempty"`
+	Annotations map[string]string `json:"annotations,omitempty"`
+	Taints      []corev1.Taint    `json:"taints,omitempty"`
 }
 
 // NodeConfigStatus defines the observed state of NodeConfig
