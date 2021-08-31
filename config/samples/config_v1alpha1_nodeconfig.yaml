@@ -5,7 +5,7 @@ metadata:
 spec:
   match:
     nodeNamePatterns:
-      - okd4-worker-edge-.*
+      - okd4-edge-edge-.*
     # nodeSelectorTerms:
     # - matchExpressions:
     #   - key: kubernetes.io/hostname

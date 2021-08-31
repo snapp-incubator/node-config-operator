@@ -83,7 +83,6 @@ func (r *NodeConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 				logger.Error(err, "Failed to update Node", "node", node.Name)
 				return ctrl.Result{}, err
 			}
-			return ctrl.Result{}, nil
 		}
 	}
 	return ctrl.Result{}, nil
