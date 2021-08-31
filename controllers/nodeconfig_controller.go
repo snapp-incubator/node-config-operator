@@ -18,7 +18,10 @@ package controllers
 
 import (
 	"context"
+	"time"
 
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -47,10 +50,41 @@ type NodeConfigReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.9.2/pkg/reconcile
 func (r *NodeConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
-	// your logic here
+	// Lookup the route instance for this reconcile request
+	nc := &configv1alpha1.NodeConfig{}
+	err := r.Get(ctx, req.NamespacedName, nc)
+	if err != nil {
+		if errors.IsNotFound(err) {
+			// Request object not found, could have been deleted after reconcile request.
+			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+			// Return and don't requeue
+			logger.Info("Resource not found. Ignoring since object must be deleted")
+			return ctrl.Result{}, nil
+		}
+		// Error reading the object - requeue the request.
+		logger.Error(err, "Failed to get Objet")
+		return ctrl.Result{}, err
+	}
 
+	// Trigger the node reconcile with a fake update on affected nodes
+	nodeList := &corev1.NodeList{}
+	err = r.List(ctx, nodeList, &client.ListOptions{})
+	if err != nil {
+		logger.Error(err, "Failed to list Nodes")
+		return ctrl.Result{}, err
+	}
+	for _, node := range nodeList.Items {
+		if nodeMatchNodeConfig(node, nc.Spec.Match) {
+			err = r.fakeUpdateNode(ctx, node)
+			if err != nil {
+				logger.Error(err, "Failed to update Node", "node", node.Name)
+				return ctrl.Result{}, err
+			}
+			return ctrl.Result{}, nil
+		}
+	}
 	return ctrl.Result{}, nil
 }
 
@@ -59,4 +93,14 @@ func (r *NodeConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&configv1alpha1.NodeConfig{}).
 		Complete(r)
+}
+
+func (r *NodeConfigReconciler) fakeUpdateNode(ctx context.Context, node corev1.Node) error {
+
+	node.Annotations["nodeconfig.config.snappcloud.io/timestamp"] = time.Now().String()
+	err := r.Update(ctx, &node)
+	if err != nil {
+		return err
+	}
+	return nil
 }

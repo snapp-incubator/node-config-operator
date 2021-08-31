@@ -77,18 +77,18 @@ func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 	}
 	// for NodeConfig in list, check if node matches any NodeConfig
 	for _, nc := range ncList.Items {
-		if nodeMatchNodeConfig(node, nc.Spec.Match) {
+		if nodeMatchNodeConfig(*node, nc.Spec.Match) {
 			// Update the Node with the NodeConfig
 			updateNode, match := nodeMergeNodeConfig(*node, nc.Spec.Merge)
 			// if they are already the same, continue
 			if match {
-				logger.Info("Node has desired NodeConfig", "node.Name", node.Name, "nodeconfig.Name", nc.Name)
+				logger.Info("Node has desired NodeConfig", "nodeconfig.Name", nc.Name)
 				continue
 			}
-			logger.Info("Updating Node with NodeConfig", "node.Name", node.Name, "nodeconfig.Name", nc.Name)
+			logger.Info("Updating Node with NodeConfig", "nodeconfig.Name", nc.Name)
 			err = r.Update(ctx, &updateNode)
 			if err != nil {
-				logger.Error(err, "Failed to update Node", "node.Name", node.Name, "nodeconfig.Name", nc.Name)
+				logger.Error(err, "Failed to update Node", "nodeconfig.Name", nc.Name)
 				return ctrl.Result{}, err
 			}
 
@@ -105,7 +105,7 @@ func (r *NodeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-func nodeMatchNodeConfig(node *corev1.Node, m configv1alpha1.Match) bool {
+func nodeMatchNodeConfig(node corev1.Node, m configv1alpha1.Match) bool {
 	for _, nodeNamePattern := range m.NodeNamePatterns {
 		pattern := "^" + nodeNamePattern + "$"
 		match, _ := regexp.MatchString(pattern, node.Name)
