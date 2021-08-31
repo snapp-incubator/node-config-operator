@@ -77,6 +77,7 @@ func (r *NodeConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	}
 	for _, node := range nodeList.Items {
 		if nodeMatchNodeConfig(node, nc.Spec.Match) {
+			logger.Info("Updating Node", "node", node.Name)
 			err = r.fakeUpdateNode(ctx, node)
 			if err != nil {
 				logger.Error(err, "Failed to update Node", "node", node.Name)
