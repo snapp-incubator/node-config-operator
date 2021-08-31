@@ -35,8 +35,9 @@ IMAGE_TAG_BASE ?= snappcloud.io/node-config-operator
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 
+REG = registry.okd4.teh-1.snappcloud.io
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= ${REG}/public-reg/node-config-operator:latest
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 
@@ -85,23 +86,32 @@ fmt: ## Run go fmt against code.
 vet: ## Run go vet against code.
 	go vet ./...
 
+tidy:
+	go mod tidy
+
 test: manifests generate fmt vet envtest ## Run tests.
 	go test ./... -coverprofile cover.out
+	go tool cover -html=cover.out -o coverage.html
 
 ##@ Build
 
-build: generate fmt vet ## Build manager binary.
-	go build -o bin/manager main.go
+build: manifests generate fmt vet tidy ## Build manager binary.
+	go build -race -o bin/manager main.go
 
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
 
 docker-build: test ## Build docker image with the manager.
-	docker build -t ${IMG} .
+	sudo podman build -t ${IMG} .
 
 docker-push: ## Push docker image with the manager.
-	docker push ${IMG}
+	sudo podman push ${IMG}
 
+docker-login:
+	sudo podman login ${REG} -u ${REG_USER} -p ${REG_PASSWORD}
+
+redeploy: docker-build docker-login docker-push
+	oc delete po --all -n node-config-operator-system
 ##@ Deployment
 
 install: manifests kustomize ## Install CRDs into the K8s cluster specified in ~/.kube/config.
@@ -154,7 +164,7 @@ bundle: manifests kustomize ## Generate bundle manifests and metadata, then vali
 
 .PHONY: bundle-build
 bundle-build: ## Build the bundle image.
-	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	sudo docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
 .PHONY: bundle-push
 bundle-push: ## Push the bundle image.
