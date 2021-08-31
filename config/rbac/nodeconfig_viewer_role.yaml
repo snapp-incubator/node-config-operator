@@ -1,0 +1,20 @@
+# permissions for end users to view nodeconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nodeconfig-viewer-role
+rules:
+- apiGroups:
+  - config.snappcloud.io
+  resources:
+  - nodeconfigs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - config.snappcloud.io
+  resources:
+  - nodeconfigs/status
+  verbs:
+  - get
