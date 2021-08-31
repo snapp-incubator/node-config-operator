@@ -1,3 +1,4 @@
+---
 apiVersion: config.snappcloud.io/v1alpha1
 kind: NodeConfig
 metadata:
@@ -25,5 +26,35 @@ spec:
     annotations:
       nodeconfig.config.snappcloud.io/managed: "true"
     taints:
-    - effect: NoExecute
-      key: node-role.kubernetes.io/edge
+    - key: node-role.kubernetes.io/edge
+      effect: NoExecute
+---
+apiVersion: config.snappcloud.io/v1alpha1
+kind: NodeConfig
+metadata:
+  name: nodeconfig-build
+spec:
+  match:
+    nodeNamePatterns:
+      - okd4-worker-build
+  merge:
+    labels:
+      node-role.kubernetes.io/build: "true"
+    taints:
+    -  key: node-role.kubernetes.io/build
+       effect: NoExecute
+---
+apiVersion: config.snappcloud.io/v1alpha1
+kind: NodeConfig
+metadata:
+  name: spare-prefer-taint
+spec:
+  match:
+    nodeNamePatterns:
+      - okd4-worker-worker-0
+      - okd4-worker-worker-1
+  merge:
+    taints:
+    - key: node-role.kubernetes.io/spare
+      effect: PreferNoSchedule
+

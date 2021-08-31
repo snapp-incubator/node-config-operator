@@ -136,9 +136,21 @@ func nodeMergeNodeConfig(node corev1.Node, m configv1alpha1.Merge) (updatedNode 
 		}
 	}
 
-	if !reflect.DeepEqual(node.Spec.Taints, m.Taints) {
-		match = false
-		node.Spec.Taints = m.Taints
+	if m.Taints != nil {
+		newTaints := node.Spec.Taints
+		for _, taint := range m.Taints {
+			found := false
+			for _, nodeTaint := range node.Spec.Taints {
+				if reflect.DeepEqual(nodeTaint, taint) {
+					found = true
+				}
+			}
+			if !found {
+				match = false
+				newTaints = append(newTaints, taint)
+			}
+		}
+		node.Spec.Taints = newTaints
 	}
 
 	return node, match
