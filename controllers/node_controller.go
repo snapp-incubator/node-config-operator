@@ -18,7 +18,6 @@ package controllers
 
 import (
 	"context"
-	"reflect"
 	"regexp"
 
 	configv1alpha1 "github.com/snapp-cab/node-config-operator/api/v1alpha1"
@@ -140,9 +139,13 @@ func nodeMergeNodeConfig(node corev1.Node, m configv1alpha1.Merge) (updatedNode 
 		newTaints := node.Spec.Taints
 		for _, taint := range m.Taints {
 			found := false
-			for _, nodeTaint := range node.Spec.Taints {
-				if reflect.DeepEqual(nodeTaint, taint) {
+			for i, nodeTaint := range node.Spec.Taints {
+				if nodeTaint.Key == taint.Key {
 					found = true
+					if nodeTaint.Value != taint.Value || nodeTaint.Effect != taint.Effect {
+						match = false
+						newTaints[i] = taint
+					}
 				}
 			}
 			if !found {
