@@ -80,9 +80,21 @@ For sample NodeConfig objects, see [config/samples](config/samples) directory.
 
 | Metric                                              | Notes
 |-----------------------------------------------------|------------------------------------
-| thanosfederateproxy_scrape_duration_seconds_count   | Total number of scrape requests with response code
-| thanosfederateproxy_scrape_duration_seconds_sum     | Duration of scrape requests with response code
-| thanosfederateproxy_scrape_duration_seconds_bucket  | Count of scrape requests per bucket (for calculating percentile)
+| controller_runtime_active_workers | Number of currently used workers per controller
+| controller_runtime_max_concurrent_reconciles | Maximum number of concurrent reconciles per controller
+| controller_runtime_reconcile_errors_total | Total number of reconciliation errors per controller
+| controller_runtime_reconcile_time_seconds | Length of time per reconciliation per controller
+| controller_runtime_reconcile_total | Total number of reconciliations per controller
+| rest_client_request_latency_seconds | Request latency in seconds. Broken down by verb and URL.
+| rest_client_requests_total | Number of HTTP requests, partitioned by status code, method, and host.
+| workqueue_adds_total | Total number of adds handled by workqueue
+| workqueue_depth | Current depth of workqueue
+| workqueue_longest_running_processor_seconds | How many seconds has the longest running processor for workqueue been running.
+| workqueue_queue_duration_seconds | How long in seconds an item stays in workqueue before being requested
+| workqueue_retries_total | Total number of retries handled by workqueue
+| workqueue_unfinished_work_seconds | How many seconds of work has been done that is in progress and hasn't been observed by work_duration. Large values indicate stuck threads. One can deduce the number of stuck threads by observing the rate at which this increases.
+| workqueue_work_duration_seconds | How long in seconds processing an item from workqueue takes.
+
 
 ## Security
 
