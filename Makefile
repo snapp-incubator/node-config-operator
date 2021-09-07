@@ -90,8 +90,8 @@ tidy:
 	go mod tidy
 
 test: manifests generate fmt vet envtest ## Run tests.
-	go test ./... -coverprofile cover.out
-	go tool cover -html=cover.out -o coverage.html
+	go test ./... -covermode=atomic -coverprofile=coverage.out
+	go tool cover -html=coverage.out -o coverage.html
 
 ##@ Build
 
