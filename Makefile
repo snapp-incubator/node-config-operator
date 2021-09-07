@@ -111,7 +111,6 @@ docker-login:
 	sudo podman login ${REG} -u ${REG_USER} -p ${REG_PASSWORD}
 
 redeploy: docker-build docker-login docker-push
-	oc delete po --all -n node-config-operator-system
 ##@ Deployment
 
 install: manifests kustomize ## Install CRDs into the K8s cluster specified in ~/.kube/config.

@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	configv1alpha1 "github.com/snapp-cab/node-config-operator/api/v1alpha1"
-	"github.com/snapp-cab/node-config-operator/controllers"
+	configv1alpha1 "github.com/snapp-incubator/node-config-operator/api/v1alpha1"
+	"github.com/snapp-incubator/node-config-operator/controllers"
 	//+kubebuilder:scaffold:imports
 )
 

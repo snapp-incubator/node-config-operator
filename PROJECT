@@ -5,7 +5,7 @@ plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: node-config-operator
-repo: github.com/snapp-cab/node-config-operator
+repo: github.com/snapp-incubator/node-config-operator
 resources:
 - api:
     crdVersion: v1
@@ -13,7 +13,7 @@ resources:
   domain: snappcloud.io
   group: config
   kind: NodeConfig
-  path: github.com/snapp-cab/node-config-operator/api/v1alpha1
+  path: github.com/snapp-incubator/node-config-operator/api/v1alpha1
   version: v1alpha1
 - controller: true
   group: core

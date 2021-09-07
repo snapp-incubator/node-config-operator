@@ -32,7 +32,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 
-	configv1alpha1 "github.com/snapp-cab/node-config-operator/api/v1alpha1"
+	configv1alpha1 "github.com/snapp-incubator/node-config-operator/api/v1alpha1"
 	//+kubebuilder:scaffold:imports
 )
 

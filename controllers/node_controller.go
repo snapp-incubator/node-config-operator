@@ -20,7 +20,7 @@ import (
 	"context"
 	"regexp"
 
-	configv1alpha1 "github.com/snapp-cab/node-config-operator/api/v1alpha1"
+	configv1alpha1 "github.com/snapp-incubator/node-config-operator/api/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"

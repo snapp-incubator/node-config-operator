@@ -1,4 +1,4 @@
-module github.com/snapp-cab/node-config-operator
+module github.com/snapp-incubator/node-config-operator
 
 go 1.16
 

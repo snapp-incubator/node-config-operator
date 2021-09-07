@@ -27,7 +27,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	configv1alpha1 "github.com/snapp-cab/node-config-operator/api/v1alpha1"
+	configv1alpha1 "github.com/snapp-incubator/node-config-operator/api/v1alpha1"
 )
 
 // NodeConfigReconciler reconciles a NodeConfig object
