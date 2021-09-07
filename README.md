@@ -1,9 +1,9 @@
 # NodeConfig Operator
 
-An operator to manage node labels, annoations and taints.
+An operator to manage node labels, annotations and taints based on `NodeConfig` Custom Resource.
 
 
-To have the node configuration as IaC, there are two operators:
+Comparison to alternatives:
 
 1. https://github.com/barpilot/node-labeler-operator: this one does support node taints and labels, but can only select nodes based on labels, not node name pattern (regex). Also it is not an actively maintained project and has no activity since 2018.
 
