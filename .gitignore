@@ -24,3 +24,4 @@ node-config-operator
 *.swp
 *.swo
 *~
+coverage.html

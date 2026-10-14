@@ -1,37 +1,9 @@
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: manager-role
 rules:
-- apiGroups:
-  - config.snappcloud.io
-  resources:
-  - nodeconfigs
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - config.snappcloud.io
-  resources:
-  - nodeconfigs/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - config.snappcloud.io
-  resources:
-  - nodeconfigs/status
-  verbs:
-  - get
-  - patch
-  - update
 - apiGroups:
   - ""
   resources:
@@ -54,6 +26,32 @@ rules:
   - ""
   resources:
   - nodes/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - config.snappcloud.io
+  resources:
+  - nodeconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - config.snappcloud.io
+  resources:
+  - nodeconfigs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - config.snappcloud.io
+  resources:
+  - nodeconfigs/status
   verbs:
   - get
   - patch

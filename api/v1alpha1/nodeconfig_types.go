@@ -72,5 +72,5 @@ type NodeConfigList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&NodeConfig{}, &NodeConfigList{})
+	SchemeBuilder.Register(knownTypes(&NodeConfig{}, &NodeConfigList{}))
 }

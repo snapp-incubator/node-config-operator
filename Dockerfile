@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.21.3 as builder
+FROM golang:1.27 AS builder
 
 WORKDIR /workspace
 
@@ -18,7 +18,7 @@ COPY controllers/ controllers/
 # Build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o manager main.go
 
-FROM docker.io/library/alpine:latest
+FROM docker.io/library/alpine:3.24
 WORKDIR /
 COPY --from=builder /workspace/manager .
 USER 65532:65532
